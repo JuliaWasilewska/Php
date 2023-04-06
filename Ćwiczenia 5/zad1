@@ -1,0 +1,77 @@
+// dane.php
+$cennik_jedzenia = array(
+"pizza" => 25.00,
+"kebab" => 18.50,
+"hamburger" => 15.00,
+);
+
+$cennik_dodatkow = array(
+"ser" => 2.50,
+"bekon" => 3.00,
+"pieczarki" => 1.50,
+);
+
+// funkcje.php
+function oblicz($rodzaj, $ilosc, $dodatki) {
+global $cennik_jedzenia, $cennik_dodatkow;
+
+$cena_jedzenia = $cennik_jedzenia[$rodzaj] * $ilosc;
+$cena_dodatkow = 0;
+
+foreach ($dodatki as $dodatek) {
+$cena_dodatkow += $cennik_dodatkow[$dodatek];
+}
+
+$cena_calkowita = $cena_jedzenia + $cena_dodatkow;
+
+return $cena_calkowita;
+}
+
+// index.php
+include("dane.php");
+include("funkcje.php");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+$rodzaj = $_POST["rodzaj"];
+$ilosc = $_POST["ilosc"];
+$dodatki = $_POST["dodatki"];
+$uwagi = $_POST["uwagi"];
+
+if (!empty($rodzaj) && !empty($ilosc)) {
+$cena = oblicz($rodzaj, $ilosc, $dodatki);
+echo "Cena zamówienia: " . $cena . " zł";
+} else {
+echo "Nie wypełniono poprawnie formularza!";
+}
+}
+
+?>
+
+<form method="post" action="">
+  <label for="rodzaj">Rodzaj jedzenia:</label>
+  <select name="rodzaj" id="rodzaj">
+    <option value="">Wybierz z listy</option>
+    <?php foreach ($cennik_jedzenia as $nazwa => $cena): ?>
+      <option value="<?php echo $nazwa; ?>"><?php echo $nazwa . " (" . $cena . " zł)"; ?></option>
+    <?php endforeach; ?>
+  </select>
+<br><br>
+
+<label for="dodatki">Dodatki:</label><br>
+
+  <?php foreach ($cennik_dodatkow as $nazwa => $cena): ?>
+<input type="checkbox" name="dodatki[]" value="<?php echo $nazwa; ?>"><?php echo $nazwa . " (" . $cena . " zł)"; ?><br>
+  <?php endforeach; ?>
+  <br>
+<label for="ilosc">Ilość:</label>
+<input type="number" name="ilosc" id="ilosc">
+
+<br><br>
+
+<label for="uwagi">Uwagi:</label>
+
+  <textarea name="uwagi" id="uwagi"></textarea>
+<br><br>
+
+  <input type="submit" value="Zamów">
+</form>
