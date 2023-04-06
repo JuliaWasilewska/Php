@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Błędne logowanie</title>
+</head>
+<body>
+	<h1>Błędne logowanie</h1>
+	<p>Niepoprawny login lub hasło.</p>
+	<a href="formularz_logowania.php">Powrót do formularza logowania</a>
+</body>
+</html>
