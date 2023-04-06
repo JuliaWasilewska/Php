@@ -1,0 +1,39 @@
+<?php
+// definicja tablicy podstron
+$podstrony = array(
+    array('nazwa' => 'O nas', 'link' => 'onas', 'tresc' => 'Witaj na stronie'),
+    array('nazwa' => 'Kontakt', 'link' => 'kontakt', 'tresc' => 'Skontaktuj się z nami'),
+    array('nazwa' => 'Oferta', 'link' => 'oferta', 'tresc' => 'Zapoznaj się z naszą ofertą')
+);
+
+// sprawdzenie, czy został wybrany link z $_GET
+if(isset($_GET['link'])) {
+    $wybrany_link = $_GET['link'];
+} else {
+    $wybrany_link = 'onas'; // domyślny link, gdy nie ma żadnego wybranego
+}
+
+// szukanie podstrony o wybranym linku w tablicy podstron
+$znaleziona_podstrona = false;
+foreach($podstrony as $podstrona) {
+    if($podstrona['link'] == $wybrany_link) {
+        $znaleziona_podstrona = $podstrona;
+        break;
+    }
+}
+
+// wyświetlenie menu strony
+echo '<ul>';
+foreach($podstrony as $podstrona) {
+    echo '<li><a href="index.php?link='.$podstrona['link'].'">'.$podstrona['nazwa'].'</a></li>';
+}
+echo '</ul>';
+
+// wyświetlenie nazwy i treści aktualnie wybranej podstrony
+if($znaleziona_podstrona !== false) {
+    echo '<h1>'.$znaleziona_podstrona['nazwa'].'</h1>';
+    echo '<p>'.$znaleziona_podstrona['tresc'].'</p>';
+} else {
+    echo '<p>Podstrona nie została znaleziona.</p>';
+}
+?>
