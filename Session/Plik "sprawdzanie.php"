@@ -1,0 +1,19 @@
+<?php
+$poprawny_login = "user123";
+$poprawne_haslo = "pass123";
+
+if($_SERVER["REQUEST_METHOD"] == "POST") {
+	$login = $_POST["login"];
+	$haslo = $_POST["haslo"];
+
+	if($login == $poprawny_login && $haslo == $poprawne_haslo) {
+		session_start();
+		$_SESSION["zalogowany"] = true;
+		header("Location: zalogowano.php");
+		exit();
+	} else {
+		header("Location: niezalogowano.php");
+		exit();
+	}
+}
+?>
