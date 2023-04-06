@@ -1,0 +1,33 @@
+<form method="POST" action="glosowanie.php">
+  <p>Pytanie: Czy podoba Ci się ta strona internetowa?</p>
+  <input type="radio" name="glos" value="tak" required> Tak<br>
+  <input type="radio" name="glos" value="nie"> Nie<br>
+  <input type="submit" value="Głosuj">
+</form>
+
+<?php
+// ustawienie nazwy ciastka
+$cookie_name = "glos_cookie";
+
+// sprawdzenie czy już głosowano
+if(isset($_COOKIE[$cookie_name])) {
+  echo "Już głosowałeś/aś. Dziękujemy!";
+} else {
+  // sprawdzenie czy formularz został przesłany
+  if(isset($_POST['glos'])) {
+    // zapisanie wartości ciastka na 24 godziny
+    setcookie($cookie_name, true, time() + (86400), "/");
+    
+    // pobranie wybranej odpowiedzi
+    $glos = $_POST['glos'];
+    
+    // zapisanie wyników do pliku lub bazy danych
+    // ...
+    
+    // wyświetlenie informacji o pomyślnym oddaniu głosu
+    echo "Dziękujemy za oddanie głosu!";
+  } else {
+    echo "Wybierz odpowiedź i kliknij przycisk Głosuj.";
+  }
+}
+?>
