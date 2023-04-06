@@ -1,0 +1,46 @@
+function dodaj($liczba1, $liczba2) {
+  return $liczba1 + $liczba2;
+}
+
+function odejmij($liczba1, $liczba2) {
+  return $liczba1 - $liczba2;
+}
+
+function pomnoz($liczba1, $liczba2) {
+  return $liczba1 * $liczba2;
+}
+
+function podziel($liczba1, $liczba2) {
+  if ($liczba2 == 0) {
+    return 'Nie można dzielić przez zero';
+  } else {
+    return $liczba1 / $liczba2;
+  }
+}
+<?php
+require_once 'funkcje.php';
+
+$liczba1 = $_POST['liczba1'];
+$liczba2 = $_POST['liczba2'];
+$dzialanie = $_POST['dzialanie'];
+
+switch ($dzialanie) {
+  case 'dodawanie':
+    $wynik = dodaj($liczba1, $liczba2);
+    break;
+  case 'odejmowanie':
+    $wynik = odejmij($liczba1, $liczba2);
+    break;
+  case 'mnozenie':
+    $wynik = pomnoz($liczba1, $liczba2);
+    break;
+  case 'dzielenie':
+    $wynik = podziel($liczba1, $liczba2);
+    break;
+  default:
+    $wynik = 'Nieznane działanie';
+    break;
+}
+
+echo "Wynik działania $dzialanie dla liczb $liczba1 i $liczba2 to: $wynik";
+?>
