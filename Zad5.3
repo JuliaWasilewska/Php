@@ -1,0 +1,78 @@
+<?php
+session_start();
+
+// utworzenie planszy w sesji, jeśli jeszcze nie istnieje
+if (!isset($_SESSION['board'])) {
+    $_SESSION['board'] = array(
+        array(null, null, null),
+        array(null, null, null),
+        array(null, null, null)
+    );
+}
+
+// obsługa ruchu gracza
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $row = $_POST['row'];
+    $col = $_POST['col'];
+    $symbol = $_SESSION['x_turn'] ? 'X' : 'O';
+    $_SESSION['board'][$row][$col] = $symbol;
+    $_SESSION['x_turn'] = !$_SESSION['x_turn'];
+    
+    // sprawdzenie, czy gra się zakończyła
+    $winner = check_winner();
+    if ($winner !== null) {
+        header('Location: game_over.php?winner=' . $winner);
+        exit;
+    } elseif (is_board_full()) {
+        header('Location: game_over.php?winner=tie');
+        exit;
+    }
+}
+
+// wyświetlenie planszy
+function display_board() {
+    $board = $_SESSION['board'];
+    echo '<table>';
+    for ($i = 0; $i < 3; $i++) {
+        echo '<tr>';
+        for ($j = 0; $j < 3; $j++) {
+            $cell = $board[$i][$j];
+            if ($cell === null) {
+                echo '<td><a href="move.php?row=' . $i . '&col=' . $j . '"> </a></td>';
+            } else {
+                echo '<td>' . $cell . '</td>';
+            }
+        }
+        echo '</tr>';
+    }
+    echo '</table>';
+}
+
+// sprawdzenie, czy ktoś wygrał
+function check_winner() {
+    $board = $_SESSION['board'];
+    // sprawdzenie wierszy
+    for ($i = 0; $i < 3; $i++) {
+        if ($board[$i][0] === $board[$i][1] && $board[$i][1] === $board[$i][2] && $board[$i][0] !== null) {
+            return $board[$i][0];
+        }
+    }
+    // sprawdzenie kolumn
+    for ($j = 0; $j < 3; $j++) {
+        if ($board[0][$j] === $board[1][$j] && $board[1][$j] === $board[2][$j] && $board[0][$j] !== null) {
+            return $board[0][$j];
+        }
+    }
+    // sprawdzenie przekątnych
+    if ($board[0][0] === $board[1][1] && $board[1][1] === $board[2][2] && $board[0][0] !== null) {
+        return $board[0][0];
+    }
+    if ($board[0][2] === $board[1][1] && $board[1][1] === $board[2][0] && $board[0][2] !== null) {
+        return $board[0][2];
+    }
+    return null;
+}
+
+// sprawdzenie, czy plansza jest już pełna
+function is_board_full() {
+    $board = $_SESSION['board'];
