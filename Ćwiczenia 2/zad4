@@ -1,0 +1,24 @@
+<?php
+function pesel_na_date($pesel) {
+    $rok = substr($pesel, 0, 2); // odczytanie dwóch pierwszych cyfr numeru PESEL jako rok
+    $miesiac = substr($pesel, 2, 2); // odczytanie dwóch kolejnych cyfr jako miesiąc
+    $dzien = substr($pesel, 4, 2); // odczytanie dwóch kolejnych cyfr jako dzień
+
+    if ($miesiac > 80 && $miesiac < 93) {
+        $rok = "18" . $rok;
+        $miesiac -= 80;
+    } elseif ($miesiac > 0 && $miesiac < 13) {
+        $rok = "19" . $rok;
+    } elseif ($miesiac > 20 && $miesiac < 33) {
+        $rok = "20" . $rok;
+        $miesiac -= 20;
+    }
+
+    // Zwrócenie daty w formacie dd-mm-rr
+    $data_urodzenia = $dzien . "-" . str_pad($miesiac, 2, "0", STR_PAD_LEFT) . "-" . substr($rok, 2, 2);
+    return $data_urodzenia;
+}
+$pesel = "83010112345";
+$data_urodzenia = pesel_na_date($pesel);
+echo $data_urodzenia;
+//wyświetla 01-01-83
